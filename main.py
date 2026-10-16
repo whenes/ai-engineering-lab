@@ -3,12 +3,34 @@ from services.llm_service import LLMService
 
 def main():
     llm = LLMService()
+    history = []
 
-    response = llm.generate(
-        "Explique o que é uma API REST em até três frases."
-    )
+    print("Assistente de Conhecimento")
+    print("Digite 'sair' para encerrar.\n")
 
-    print(response)
+    while True:
+        question = input("Você: ").strip()
+
+        if question.lower() == "sair":
+            print("Encerrando o assistente.")
+            break
+
+        if not question:
+            continue
+
+        history.append({
+            "role": "user",
+            "content": question,
+        })
+
+        response = llm.generate(history)
+
+        history.append({
+            "role": "model",
+            "content": response,
+        })
+
+        print(f"\nAssistente: {response}\n")
 
 
 if __name__ == "__main__":

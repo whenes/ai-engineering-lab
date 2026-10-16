@@ -3,6 +3,7 @@ from google.genai import types
 
 from config import GEMINI_API_KEY
 
+
 class LLMService:
     def __init__(self):
         self.client = genai.Client(
@@ -10,15 +11,19 @@ class LLMService:
             http_options=types.HttpOptions(timeout=60000),
         )
 
-
-    def generate(self, prompt: str) -> str:
+    def generate(self, history: list[dict[str, str]]) -> str:
         response = self.client.models.generate_content(
             model="gemini-3.5-flash-lite",
-            contents=prompt,
+            contents=[
+                types.Content(
+                    role=message["role"],
+                    parts=[types.Part.from_text(text=message["content"])],
+                )
+                for message in history
+            ],
             config=types.GenerateContentConfig(
-                max_output_tokens=300,
+                max_output_tokens=600,
             ),
         )
 
         return response.text or ""
-
