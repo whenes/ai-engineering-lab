@@ -22,6 +22,13 @@ class LLMService:
                 for message in history
             ],
             config=types.GenerateContentConfig(
+                system_instruction=(
+                    "Você é um Assistente de Conhecimento especializado em tecnologia. "
+                    "Responda em português brasileiro por padrão. "
+                    "Explique conceitos técnicos com clareza e utilize exemplos práticos "
+                    "quando forem úteis. "
+                    "Se não souber uma resposta, admita isso em vez de inventar informações."
+                ),
                 max_output_tokens=600,
             ),
         )
